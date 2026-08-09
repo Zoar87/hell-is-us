@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hell is Us — Expediente Letam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#080E10; --deep:#0C1518; --panel:#111E22; --panel-2:#152429;
+  --line:#1E3238; --line-hi:#2C4A52;
+  --ink:#C9D9D6; --ink-dim:#8AA19D; --ink-faint:#5F7874;
+  --hud:#6FD9CB; --hud-dim:#33837A;
+  --pesar:#3E86E0; --ira:#DB4B44; --extasis:#E0A62E; --terror:#43B26B;
+  --display:'Chakra Petch',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--void);color:var(--ink);
+  font-family:var(--body);font-weight:300;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.55;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(95,211,196,.07), transparent 70%),
+    repeating-linear-gradient(0deg, transparent 0 2px, rgba(95,211,196,.012) 2px 3px);
+}
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 24px 96px}
+
+/* ---------- cabecera ---------- */
+header{padding:56px 0 0}
+.stamp{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--hud-dim);display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+}
+.stamp span:not(:last-child)::after{content:" ·";margin-left:16px;color:var(--line-hi)}
+h1{
+  font-family:var(--display);font-weight:600;font-size:clamp(34px,6vw,62px);
+  line-height:1.02;letter-spacing:-.01em;margin:18px 0 10px;color:#E3F0ED;
+}
+h1 em{font-style:normal;color:var(--hud);display:block;font-size:.42em;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:400;margin-top:14px}
+.lede{max-width:64ch;color:var(--ink-dim);font-size:16.5px;margin:0 0 8px}
+
+/* ---------- cerradura de piedras ---------- */
+.lock{display:flex;gap:10px;margin:32px 0 8px;flex-wrap:wrap}
+.slot{
+  flex:1 1 130px;min-width:130px;border:1px solid var(--line);background:var(--deep);
+  padding:12px 14px;position:relative;transition:.35s;
+}
+.slot::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--line-hi);transition:.35s}
+.slot b{display:block;font-family:var(--display);font-weight:500;font-size:14px;letter-spacing:.04em}
+.slot small{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
+.slot.on{background:var(--panel)}
+.slot.on b{color:#E3F0ED}
+.slot.on small{color:var(--ink-dim)}
+.slot[data-k=pesar].on::before{background:var(--pesar);box-shadow:0 0 14px var(--pesar)}
+.slot[data-k=terror].on::before{background:var(--terror);box-shadow:0 0 14px var(--terror)}
+.slot[data-k=ira].on::before{background:var(--ira);box-shadow:0 0 14px var(--ira)}
+.slot[data-k=extasis].on::before{background:var(--extasis);box-shadow:0 0 14px var(--extasis)}
+
+/* ---------- navegación ---------- */
+nav{
+  position:sticky;top:0;z-index:20;display:flex;gap:2px;flex-wrap:wrap;
+  margin:36px 0 0;padding:10px 0;background:rgba(8,14,16,.93);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+}
+nav button{
+  font-family:var(--display);font-size:13px;font-weight:500;letter-spacing:.09em;
+  text-transform:uppercase;background:none;border:1px solid transparent;color:var(--ink-faint);
+  padding:8px 15px;cursor:pointer;transition:.2s;
+}
+nav button:hover{color:var(--ink)}
+nav button[aria-selected=true]{color:#08181A;background:var(--hud);border-color:var(--hud)}
+nav button:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
+
+section[hidden]{display:none}
+section{padding-top:44px;animation:rise .4s ease}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){section{animation:none}html{scroll-behavior:auto}}
+
+h2{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:.01em;margin:0 0 6px;color:#E3F0ED}
+.sub{color:var(--ink-faint);font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 28px}
+
+/* ---------- espina temporal ---------- */
+.act{margin:0 0 12px;padding:22px 0 6px;border-top:1px solid var(--line)}
+.act-tag{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.act-tag b{font-family:var(--display);font-size:22px;font-weight:600;color:#E3F0ED}
+.act-tag i{font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--hud)}
+.act-note{color:var(--ink-dim);max-width:70ch;margin:0 0 4px;font-size:15px}
+
+.spine{position:relative;margin:22px 0 0;padding-left:34px}
+.spine::before{content:"";position:absolute;left:7px;top:6px;bottom:14px;width:1px;background:var(--line-hi)}
+.beat{position:relative;padding:0 0 30px}
+.beat::before{
+  content:"";position:absolute;left:-31px;top:8px;width:9px;height:9px;
+  border:1px solid var(--hud-dim);background:var(--void);border-radius:50%;
+}
+.beat.key::before{width:11px;height:11px;left:-32px;border-width:1px}
+.beat.key[data-k=pesar]::before{border-color:var(--pesar);background:var(--pesar);box-shadow:0 0 12px var(--pesar)}
+.beat.key[data-k=terror]::before{border-color:var(--terror);background:var(--terror);box-shadow:0 0 12px var(--terror)}
+.beat.key[data-k=ira]::before{border-color:var(--ira);background:var(--ira);box-shadow:0 0 12px var(--ira)}
+.beat.key[data-k=extasis]::before{border-color:var(--extasis);background:var(--extasis);box-shadow:0 0 12px var(--extasis)}
+.beat .where{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--hud-dim)}
+.beat h3{font-family:var(--display);font-weight:500;font-size:18px;margin:3px 0 7px;color:#DCEBE8}
+.beat p{margin:0 0 10px;max-width:72ch;color:var(--ink-dim);font-size:15.5px}
+.threads{display:flex;gap:6px;flex-wrap:wrap}
+.thread{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;padding:3px 9px;
+  border:1px solid var(--line-hi);color:var(--ink-faint);background:var(--deep);
+  cursor:pointer;transition:.2s;
+}
+.thread:hover,.thread:focus-visible{border-color:var(--hud);color:var(--hud);outline:none}
+
+/* ---------- rejillas de fichas ---------- */
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(268px,1fr))}
+.card{
+  border:1px solid var(--line);background:var(--panel);padding:18px 18px 16px;
+  border-left-width:2px;transition:.25s;
+}
+.card.hit{border-color:var(--hud);background:var(--panel-2)}
+.card h4{font-family:var(--display);font-weight:500;font-size:17px;margin:0 0 2px;color:#E3F0ED}
+.card .role{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--hud-dim);margin:0 0 10px}
+.card p{margin:0 0 8px;font-size:14.5px;color:var(--ink-dim)}
+.card .fate{
+  font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--ink-faint);
+  border-top:1px solid var(--line);padding-top:9px;margin-top:11px;display:block;
+}
+.card[data-b=vigilia]{border-left-color:var(--terror)}
+.card[data-b=sangre]{border-left-color:var(--pesar)}
+.card[data-b=omsif]{border-left-color:var(--ira)}
+.card[data-b=civil]{border-left-color:var(--extasis)}
+.card[data-b=neutro]{border-left-color:var(--line-hi)}
+
+.sw{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;margin:12px 0 2px}
+.sw span{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-dim)}
+.sw i{width:10px;height:10px;border-radius:2px;flex:none}
+.sw b{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-faint);font-weight:400}
+
+/* ---------- encargos ---------- */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 22px}
+.filters button{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--deep);border:1px solid var(--line);color:var(--ink-faint);
+  padding:6px 12px;cursor:pointer;transition:.2s;
+}
+.filters button:hover{color:var(--ink);border-color:var(--line-hi)}
+.filters button[aria-pressed=true]{background:var(--hud);border-color:var(--hud);color:#08181A}
+.filters button:focus-visible{outline:2px solid var(--hud);outline-offset:2px}
+.deed{
+  display:grid;grid-template-columns:38px 1fr;gap:0 16px;align-items:start;
+  border-bottom:1px solid var(--line);padding:14px 0;
+}
+.deed .n{font-family:var(--mono);font-size:12px;color:var(--ink-faint);padding-top:3px}
+.deed h4{font-family:var(--display);font-weight:500;font-size:16px;margin:0;color:#DCEBE8}
+.deed .orig{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-faint);margin-left:8px}
+.deed p{margin:5px 0 8px;font-size:14.5px;color:var(--ink-dim);max-width:74ch}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 8px;border:1px solid var(--line-hi);color:var(--ink-faint)}
+.tag.limit{border-color:var(--ira);color:#E58A86}
+
+/* ---------- cronología ---------- */
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin:0 0 26px;font-family:var(--mono);
+  font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+.legend span{display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;border:1px solid var(--line-hi)}
+.dot.cal{background:var(--ira);border-color:var(--ira)}
+.dot.ver{background:var(--hud);border-color:var(--hud)}
+.dot.unv{background:none;border-color:var(--ink-faint)}
+.era{border-top:1px solid var(--line);padding:24px 0 4px}
+.era>h3{font-family:var(--display);font-weight:600;font-size:20px;margin:0 0 2px;color:#E3F0ED}
+.era>p{margin:0 0 18px;color:var(--ink-faint);font-family:var(--mono);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase}
+.ev{display:grid;grid-template-columns:104px 1fr;gap:0 18px;padding:0 0 20px;position:relative}
+.ev .yr{font-family:var(--mono);font-size:13px;color:var(--hud);text-align:right;padding-top:2px;
+  display:flex;align-items:baseline;justify-content:flex-end;gap:7px}
+.ev .yr i{width:7px;height:7px;border-radius:50%;border:1px solid var(--ink-faint);flex:none}
+.ev.ver .yr i{background:var(--hud);border-color:var(--hud)}
+.ev.cal .yr i{background:var(--ira);border-color:var(--ira)}
+.ev.cal .yr{color:#E58A86}
+.ev h5{font-family:var(--display);font-weight:500;font-size:16px;margin:0 0 4px;color:#DCEBE8}
+.ev p{margin:0;font-size:14.5px;color:var(--ink-dim);max-width:70ch}
+.ev .fix{display:block;margin-top:7px;font-family:var(--mono);font-size:11px;
+  color:#E58A86;letter-spacing:.03em}
+@media(max-width:640px){
+  .ev{grid-template-columns:1fr;gap:0}
+  .ev .yr{text-align:left;justify-content:flex-start;flex-direction:row-reverse;margin-bottom:4px}
+}
+
+/* ---------- notas ---------- */
+.note{
+  border:1px solid var(--line);border-left:2px solid var(--hud-dim);background:var(--deep);
+  padding:16px 18px;margin:30px 0 0;font-size:14.5px;color:var(--ink-dim);max-width:80ch;
+}
+.note b{font-weight:500;color:var(--ink);font-family:var(--display)}
+footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-faint)}
+@media(max-width:640px){
+  .wrap{padding:0 16px 64px}
+  .deed{grid-template-columns:1fr;gap:0}
+  .deed .n{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="stamp"><span>Expediente R. Letam</span><span>Hadea, 1993</span><span>Declaración bajo suero</span><span>Consejo Ziel · OMSIF</span></div>
+  <h1>Hell is Us<em>La historia completa, acto por acto</em></h1>
+  <p class="lede">Todo lo que sigue es el relato de Rémi Letam a su interrogador. Cada acto, cada piedra angular, cada persona a la que ayudó o no llegó a tiempo de ayudar.</p>
+
+  <div class="lock" id="lock">
+    <div class="slot" data-k="pesar"><small>Acto I</small><b>Pesar</b></div>
+    <div class="slot" data-k="terror"><small>Acto II</small><b>Terror</b></div>
+    <div class="slot" data-k="ira"><small>Acto II</small><b>Ira</b></div>
+    <div class="slot" data-k="extasis"><small>Acto II</small><b>Éxtasis</b></div>
+  </div>
+</header>
+
+<nav role="tablist" aria-label="Secciones del expediente">
+  <button role="tab" id="t-linea" aria-controls="s-linea" aria-selected="true">Declaración</button>
+  <button role="tab" id="t-gente" aria-controls="s-gente" aria-selected="false">Personas</button>
+  <button role="tab" id="t-poder" aria-controls="s-poder" aria-selected="false">Facciones</button>
+  <button role="tab" id="t-lore" aria-controls="s-lore" aria-selected="false">Mitología</button>
+  <button role="tab" id="t-crono" aria-controls="s-crono" aria-selected="false">Cronología</button>
+  <button role="tab" id="t-deeds" aria-controls="s-deeds" aria-selected="false">Encargos</button>
+</nav>
+
+<!-- ============ DECLARACIÓN ============ -->
+<section id="s-linea" role="tabpanel" aria-labelledby="t-linea">
+  <h2>La declaración</h2>
+  <p class="sub">Marco · Acto I · Acto II · Acto III</p>
+  <div id="timeline"></div>
+</section>
+
+<!-- ============ PERSONAS ============ -->
+<section id="s-gente" role="tabpanel" aria-labelledby="t-gente" hidden>
+  <h2>Personas</h2>
+  <p class="sub">Sangre · Vigilia · OMSIF · Civiles de Hadea</p>
+  <div class="grid" id="people"></div>
+</section>
+
+<!-- ============ FACCIONES ============ -->
+<section id="s-poder" role="tabpanel" aria-labelledby="t-poder" hidden>
+  <h2>Facciones y organizaciones</h2>
+  <p class="sub">Quién manda, quién sabe, quién paga</p>
+  <div class="grid" id="factions"></div>
+</section>
+
+<!-- ============ MITOLOGÍA ============ -->
+<section id="s-lore" role="tabpanel" aria-labelledby="t-lore" hidden>
+  <h2>Mitología</h2>
+  <p class="sub">Calamidad · Bucles · Emociones · El Ojo</p>
+  <div class="grid" id="lore"></div>
+</section>
+
+<!-- ============ CRONOLOGÍA ============ -->
+<section id="s-crono" role="tabpanel" aria-labelledby="t-crono" hidden>
+  <h2>Cronología de Hadea</h2>
+  <p class="sub">13.700 años · seis calamidades · contrastado con los manuscritos de Tania</p>
+  <div class="legend">
+    <span><i class="dot cal"></i>Año de calamidad</span>
+    <span><i class="dot ver"></i>Fecha confirmada en los textos del juego</span>
+    <span><i class="dot unv"></i>Sin confirmar</span>
+  </div>
+  <div id="chrono"></div>
+  <div class="note"><b>Descartado por contradecir el juego.</b> Circulan resúmenes en vídeo de esta misma cronología con afirmaciones que el juego desmiente: que Vitalis sigue vivo y oculto (muere delante de Rémi en el Acto I), que existe un año 1994 con consecuencias posteriores (la historia termina en el presente del interrogatorio), que Rémi es el único capaz de detenerlos por tener un linaje ligado a la Piedra del Pesar (no hay elegido: la piedra la encontró la Vigilia en las Cuevas del Yumal en 1987 y se la pasó su padre al morir), y que el prisma amine amplifica emociones (hace lo contrario: desestabiliza y colapsa los bucles). Sobre Aribeth, el juego confirma que traicionó a la Vigilia tras ver pruebas falsificadas contra Vitalis, pero no dice que los ejecutara ella.</div>
+</section>
+
+<!-- ============ ENCARGOS ============ -->
+<section id="s-deeds" role="tabpanel" aria-labelledby="t-deeds" hidden>
+  <h2>Buenas acciones</h2>
+  <p class="sub">23 entradas · 26 encargos · se cobran con Gildas Brom</p>
+  <div class="filters" id="filters"></div>
+  <div id="deeds"></div>
+  <div class="note"><b>Sobre las fechas límite.</b> Las que aparecen marcadas caducan al colocar piedras angulares en la Fragua: la persona implicada muere o se marcha. No hay aviso dentro del juego.</div>
+</section>
+
+<footer>Fuentes: Wikipedia · wiki Fextralife · Game8 · PowerPyx · Gamer Guides · Neoseeker · GameSpot · Vandal · entrevistas a Jonathan Jacques-Belletête</footer>
+</div>
+
+<script>
+const ACTS = [
+ {id:"marco", tag:"Marco", title:"El interrogatorio", note:"Todo el juego es un flashback. Rémi está contando esto, drogado, a alguien que ya lo tiene capturado.", beats:[
+   {where:"Lugar y fecha desconocidos", h:"Bajo suero de la verdad", p:"Rémi Letam despierta bajo custodia del Consejo Ziel, una organización secreta formada por los más ricos y poderosos del mundo, con OMSIF como ejército privado. Drogado, admite ante su interrogador que se alistó en los cascos azules de la ON solo como pretexto para colarse en Hadea y buscar a sus padres. A partir de aquí, recuerda.", t:["remi","ziel","omsif"]}
+ ]},
+ {id:"a1", tag:"Acto I", title:"Reunión familiar · Legado familiar", note:"De la frontera a la primera piedra angular. Aquí es donde más cosas se pueden perder para siempre.", beats:[
+   {where:"Bosque de Senedra", h:"Entrada por la puerta de atrás", p:"Los cascos azules se retiran de Hadea antes de que Rémi pueda hacer lo suyo, así que deserta y entra solo. Se quita el uniforme de la ON. Saquea el armamento de un escuadrón caído de OMSIF —lo único capaz de herir a los Hollow Walkers— y se apropia de un APC abandonado, que será su base móvil y su único mapa.", t:["remi","omsif"]},
+   {where:"Bosque de Senedra", h:"Los primeros hadeos", p:"Ernest Caddell, granjero, sobrevive encerrado en su propio sótano con una vaca. Las ruinas del bosque esconden el primer mecanismo antiguo del juego, y en las trincheras aparece un reloj de oro con un nombre grabado que no es el suyo.", t:["caddell"]},
+   {where:"Marismas de Acasa · Jova", h:"Volver al pueblo natal", p:"Jova, donde nació, está bajo ocupación militar sabiniana y asediada por Hollow Walkers. Rémi rescata a Victor Gaz de un túnel y consigue la llave de la casa que busca. Así descubre el nombre de su padre: Vitalis, herrero del pueblo y miembro de una orden llamada la Vigilia. Ya se ha marchado.", t:["victor","vitalis","jaffer"]},
+   {where:"Alcantarillas de Jova", h:"Judith y el niño", p:"Bajo el pueblo, una mujer palomista llamada Judith esconde a un bebé sabiniano cuyos padres fueron ejecutados. Cruzó la línea que toda la guerra se empeña en mantener. Le faltan biberones y hay una vaca a dos regiones de distancia.", t:["judith","caddell"]},
+   {where:"Colinas de Vyssa", h:"El padre, once minutos tarde", p:"Siguiendo su rastro, Rémi encuentra a Vitalis mortalmente herido tras un combate contra fuerzas de OMSIF. Lo reconoce como su hijo. Le explica que la Vigilia juró proteger Hadea y detener la Calamidad, le entrega la Piedra Angular del Pesar y le manda buscar a una periodista, Tania Alver. Antes de morir le dice que su madre está muerta.", t:["vitalis","remi","tania","omsif"]},
+   {where:"Nido del Vigía", h:"El cuartel de la Vigilia", p:"Tras el puzle de las flores de cerámica y el sarcófago, aparece Gildas Brom: el miembro más viejo de la orden, en silla de ruedas, custodio de las reliquias. Le basta ver la piedra en manos de Rémi para deducir que Vitalis ha muerto. Aparta el duelo para más tarde y le da el Detector de Guardianes.", t:["gildas","vitalis"]},
+   {where:"APC", h:"Tania Alver", p:"La periodista de guerra se une a la investigación y abre el sistema de Investigación: los objetos que Rémi recoge por el mundo se convierten en información. De ahí salen las Cámaras del Saber Prohibido.", t:["tania"]},
+   {where:"Lago Cynon", h:"El rastro de flores azules", p:"La pista puede venir del abad Jaffer, de Rebecca o del propio Caddell, indistintamente. Lleva a un embalse con un puzle de pilares que hay que golpear en orden para drenar el agua y descubrir lo que hay debajo.", t:["jaffer","caddell"]},
+   {where:"Fragua Límbica", h:"Primera piedra", p:"Rémi coloca la Piedra Angular del Pesar. La puerta que abre conduce a algo llamado el Failsafe, un mecanismo que supuestamente puede detener la Calamidad. Pero hacen falta tres piedras más.", t:["failsafe"], k:"pesar"}
+ ]},
+ {id:"a2", tag:"Acto II", title:"Terror · Ira · Éxtasis", note:"La parte más larga del juego. Las tres investigaciones se pueden hacer en el orden que quieras.", beats:[
+   {where:"Canal encubierto", h:"Alguien dentro de OMSIF ayuda", p:"Una oficial anónima de OMSIF les abre acceso al Servidor Ziel, el archivo sensible sobre la historia de Hadea. Ahí Rémi descubre lo que nadie le había contado: la Calamidad no es la primera. Ha habido otras a lo largo de los siglos.", t:["aribeth","ziel"]},
+   {where:"Talju · Marastan · Aguja de Arcas", h:"Piedra Angular del Terror", p:"Talju arde. Caspian Fran organiza una evacuación desde el ayuntamiento, Boro Juven aguanta en su taller y Lukhan se esconde en la escuela; hay cuatro bengalas y cuatro supervivientes que solo salen si se las llevas. El rastro sigue a Marastan y a la leyenda de la Reina Sangrienta, y termina en lo alto de la Aguja de Arcas, en el bosque donde empezó todo.", t:["caspian","tania"], k:"terror"},
+   {where:"Jeljin · Ministerio · Museo Auriga", h:"Piedra Angular de la Ira", p:"El rastro del Auriga lleva a Jeljin, donde cuatro criptas cuentan la misma historia en fragmentos: un compromiso, una boda, treinta y tres soldados que la convirtieron en matanza, y un funeral noventa días después. La combinación abre el paso a los Sellos de Hierro, y con ellos al Museo Auriga: un edificio con celdas en el sótano.", t:["tania"], k:"ira"},
+   {where:"Abadía de Pathem · Lethe · Llanuras de la Niebla", h:"Piedra Angular del Éxtasis", p:"La pista pasa por la abadía, por la Biblioteca Nacional de Lethe y por el Ministerio de Primacía Cultural —un edificio de oficinas donde la burocracia hadea siguió funcionando mientras el país se desangraba— y desemboca en el Templo de los Caídos, entre la niebla. Ahí está el jefe más duro del acto.", t:["jaffer","tania"], k:"extasis"},
+   {where:"Sin lugar fijo", h:"La oficial de OMSIF tiene nombre", p:"El contacto anónimo se revela: es Aribeth Letam, su madre. La mujer que lo metió en la parte de atrás de un camión con cinco años y le dijo que no volviera nunca. Vitalis se equivocaba, o mintió. Antes de que puedan verse, OMSIF descubre su traición e intenta detenerla; aparentemente muere en el forcejeo.", t:["aribeth","remi","vitalis"]},
+   {where:"Fragua Límbica", h:"Las cuatro piedras", p:"Terror, Ira y Éxtasis se suman al Pesar. La puerta del Failsafe se abre.", t:["failsafe"]}
+ ]},
+ {id:"a3", tag:"Acto III", title:"Hacia lo desconocido", note:"Punto de no retorno: una vez dentro, no se puede volver a explorar Hadea hasta pasar los créditos.", beats:[
+   {where:"Bajo la Fragua", h:"El descenso", p:"Cuatro orbes —cobalto, dorado, esmeralda y carmesí— y un pergamino explican el mecanismo. Al final del camino, una arena con ocho estatuas: los Guardianes de cada emoción, los mismos símbolos que Rémi lleva viendo desde la primera hora de juego sin saber qué eran.", t:["failsafe"]},
+   {where:"La cámara", h:"El Ojo de Dios", p:"Una cámara subterránea enorme contiene una esfera gigantesca: el ojo del dios hadeo Sethyris, según la Vigilia. El origen de los bucles temporales y, por tanto, de todos los Hollow Walkers. OMSIF ya había montado un laboratorio para estudiarlo. El equipo de investigación al completo fue aniquilado por las criaturas.", t:["sethyris","omsif"]},
+   {where:"La cámara", h:"Activar el Failsafe", p:"Rémi se abre paso entre los Hollow Walkers y acciona el mecanismo. La cámara entera colapsa y el Ojo cae a un lago de lava. Aparentemente destruido. Rémi escapa por muy poco… y es capturado por OMSIF al salir. Aquí el relato alcanza al presente.", t:["failsafe","omsif"]},
+   {where:"Sala de interrogatorio", h:"La verdad sobre la traición", p:"El interrogador se lo suelta como quien remata: Aribeth traicionó a la Vigilia después de que le enseñaran pruebas falsificadas de que Vitalis había delatado a la policía la operación para sacar a Rémi del país. Toda la ruptura de su familia se construyó sobre un documento falso.", t:["aribeth","vitalis","ziel"]},
+   {where:"Sala de interrogatorio", h:"Nos vamos a casa", p:"Cuando el interrogador se dispone a ejecutarlo, Aribeth entra y lo mata: fingió su propia muerte. Libera a su hijo y escapan juntos. Le dice que se van a casa.", t:["aribeth","remi"]},
+   {where:"Post-créditos", h:"El Ojo sigue ahí", p:"Un dron de OMSIF sobrevuela los restos de la cámara. El Ojo de Dios ha sobrevivido al Failsafe.", t:["sethyris","omsif"]}
+ ]}
+];
+
+const PEOPLE = [
+ {id:"remi",b:"sangre",n:"Rémi Letam",r:"Protagonista",p:"Nacido en Hadea, sacado del país a los cinco años por su madre con la orden de no volver nunca. Entró en los cascos azules de la ON solo para cruzar una frontera cerrada. Sociópata diagnosticado con pasado militar: no reacciona ante casi nada de lo que atraviesa, y esa es exactamente la idea.",f:"Capturado, liberado, de vuelta a casa"},
+ {id:"vitalis",b:"sangre",n:"Vitalis",r:"Padre · la Vigilia",p:"Herrero de Jova y miembro de la orden que lleva siglos vigilando la Calamidad. Abandonó el pueblo antes de que llegara su hijo. Rémi lo alcanza moribundo tras un choque con OMSIF: le entrega la Piedra Angular del Pesar, le manda buscar a Tania y le dice que su madre está muerta.",f:"Muere en las Colinas de Vyssa (Acto I)"},
+ {id:"aribeth",b:"omsif",n:"Aribeth Letam",r:"Madre · oficial de OMSIF",p:"La que lo metió en el camión. Acabó dentro de OMSIF y desde ahí filtró a Rémi el acceso al Servidor Ziel sin decirle quién era. Traicionó a la Vigilia porque le enseñaron pruebas falsas de que Vitalis los había delatado.",f:"Finge su muerte · aparece en la última escena"},
+ {id:"tania",b:"neutro",n:"Tania Alver",r:"Reportera de guerra",p:"Sarcástica, curtida, la que de verdad lleva la investigación. Opera desde el APC y convierte en información los objetos que Rémi recoge. Buena parte de la humanidad del juego pasa por ella, porque el protagonista no la aporta.",f:"Acompaña hasta el final"},
+ {id:"gildas",b:"vigilia",n:"Gildas Brom",r:"El vigía más viejo",p:"Perdió el uso de las piernas hace años y desde entonces custodia las reliquias de la orden en el Nido del Vigía. Entrega el Detector de Guardianes y paga las recompensas de todas las buenas acciones.",f:"Permanece en el Nido del Vigía"},
+ {id:"victor",b:"civil",n:"Victor Gaz",r:"Herrero de Jova",p:"Rescatado de un túnel en las marismas. Te da la llave de la casa de tu padre y acaba siendo tu herrero: mejora armas y equipo. Suya es la frase que resume el juego entero, sobre que todos los sabinianos fueron palomistas alguna vez.",f:"Sigue en la fragua de Jova"},
+ {id:"caddell",b:"civil",n:"Ernest Caddell",r:"Granjero de Senedra",p:"Vive en el sótano de su propia granja con una vaca. Explica el origen del cierre de fronteras: política del presidente anterior para contener el conflicto sectario, que se desbordó igual cuando se suicidó. Su leche es lo único que puede salvar al bebé de Judith.",f:"Acoge a los refugiados de Atticus"},
+ {id:"judith",b:"civil",n:"Judith y Uli",r:"Palomista · bebé sabiniano",p:"Escondida en las alcantarillas de Jova cuidando al hijo de una pareja ejecutada por ser del otro bando. Si los biberones no llegan antes del final del Acto I, el niño muere.",f:"Depende del jugador"},
+ {id:"jaffer",b:"civil",n:"Abad Jaffer",r:"Clérigo palomista",p:"Predica en plena calle de un pueblo ocupado. Es una de las tres personas que pueden darte la pista de las flores azules, y una de las pocas voces del juego que sigue hablando de perdón mientras todo arde.",f:"Presente varios actos"},
+ {id:"caspian",b:"civil",n:"Caspian Fran",r:"Talju",p:"Organiza la evacuación de una ciudad en llamas desde el ayuntamiento. El camión sale con los supervivientes que hayas encontrado y sin los que no: cada bengala que no repartes es una persona que se queda.",f:"Evacúa Talju (Acto II)"},
+ {id:"omsifp",b:"omsif",n:"El interrogador",r:"Consejo Ziel",p:"La voz al otro lado de la mesa durante todo el juego. Le cuenta a Rémi la verdad sobre las pruebas falsificadas no para aliviarlo, sino como último golpe antes de ejecutarlo.",f:"Muerto por Aribeth"}
+];
+
+const FACTIONS = [
+ {b:"civil",n:"Sabinianos y palomistas",r:"Guerra civil",p:"Dos ramas del mismo tronco religioso enfrentadas a muerte. La distancia real entre ellos es mínima, y por eso la insistencia en la diferencia es tan feroz. Los sabinianos ocupan Jova cuando llega Rémi. El director confirmó que el conflicto bebe directamente de las guerras de la antigua Yugoslavia."},
+ {b:"vigilia",n:"La Vigilia",r:"Orden hadea",p:"Saben de la existencia de los Hollow Walkers desde mucho antes de la Calamidad y juraron proteger Hadea y detenerla. Cuartel general en el Nido del Vigía. Vitalis era, según Gildas, el mejor de todos ellos."},
+ {id:"omsif",b:"omsif",n:"OMSIF",r:"Ejército privado",p:"La fuerza militar del Consejo Ziel. Su armamento es lo único capaz de herir a las criaturas, y de un escuadrón suyo caído saca Rémi sus primeras armas. Tenían un laboratorio montado dentro de la cámara del Ojo; no quedó nadie vivo."},
+ {id:"ziel",b:"omsif",n:"Consejo Ziel",r:"Los que pagan",p:"Organización secreta formada por los más ricos y poderosos del mundo. OMSIF es su brazo armado y el Servidor Ziel su archivo. Son quienes tienen a Rémi sentado en la silla desde el primer minuto del juego."},
+ {b:"neutro",n:"Naciones Organizadas (ON)",r:"Cascos azules",p:"Trasunto directo de la ONU, cascos azules incluidos. Fueron la llave de Rémi para entrar en un país sellado y se retiraron antes de que pudiera usarla, obligándole a desertar."}
+];
+
+const LORE = [
+ {b:"neutro",n:"La Calamidad",r:"El suceso",p:"El acontecimiento sobrenatural que rompe Hadea por segunda vez, encima de la guerra. El Servidor Ziel revela que no es la primera: ha habido Calamidades anteriores a lo largo de la historia del país, y alguien se encargó de que no quedara constancia."},
+ {b:"neutro",n:"Bucles temporales",r:"Timeloops",p:"Burbujas que repiten eternamente un momento de emoción y violencia extremas. De ellas emergen los Hollow Walkers. Cerrarlas requiere abatir a sus guardianes y sellarlas con un Prisma de Amina."},
+ {b:"neutro",n:"Hollow Walkers",r:"Entidades límbicas",p:"Las criaturas nacidas del bucle. Solo el armamento de OMSIF y el forjado límbico les hacen daño. Vienen acompañadas del Haze, masas de color ligadas a cada emoción que hay que romper antes de tocar al bicho."},
+ {b:"neutro",n:"Las cuatro emociones",r:"Pesar · Ira · Éxtasis · Terror",p:"El eje de todo el sistema: esferas límbicas en las armas, sellos, Haze, piedras angulares y Centinelas comparten los mismos cuatro colores. Los orbes que recoges en el Acto III los nombran uno a uno: cobalto, carmesí, dorado y esmeralda.",sw:1},
+ {b:"neutro",n:"Piedras angulares",r:"Las cuatro llaves",p:"Cada una custodiada por un Guardián al final de una investigación. Juntas abren la puerta del Failsafe en la Fragua Límbica. La primera la entrega un padre moribundo; las otras tres hay que arrancarlas."},
+ {id:"failsafe",b:"neutro",n:"El Failsafe",r:"El mecanismo",p:"Un dispositivo antiguo pensado para detener la Calamidad de raíz. La Vigilia solo tenía teorías sobre él. Funciona: colapsa la cámara y hunde el Ojo en la lava. Durante unos minutos, parece que ha bastado."},
+ {id:"sethyris",b:"neutro",n:"Sethyris y el Ojo de Dios",r:"El origen",p:"Una esfera colosal enterrada bajo Hadea, que la Vigilia identifica como el ojo del dios hadeo Sethyris. Es la fuente de los bucles y por tanto de todo lo demás. La escena post-créditos confirma que sigue entero."},
+ {b:"neutro",n:"1993",r:"La fecha",p:"Los documentos repartidos por el juego sitúan la historia en 1993. Rogue Factor eligió a propósito una estética de los noventa —HUD mínimo, sin mapa, sin marcadores— para que la información llegue de forma orgánica, como en los juegos de esa década."}
+];
+
+const DEEDS = [
+ {n:1,es:"El reloj de oro",en:"The Golden Watch",z:"Senedra",p:"Un reloj grabado aparece en las trincheras junto a una carta del frente sabiniano. Su dueño está en el sótano de la granja."},
+ {n:2,es:"Destino olvidado",en:"Forlorn Fate",z:"Talju",lim:"Fin Acto II",p:"Un símbolo de llama y un mapa de las montañas de Senedra abren un refugio con dos personas dentro que llevan tiempo sin saber por dónde salir."},
+ {n:3,es:"Tierra de leche y miel",en:"Land of Milk and Honey",z:"Acasa",lim:"Fin Acto I",p:"Los biberones vacíos de Judith. La única vaca viva está a una región de distancia, en la granja de Caddell. Si el viaje no se hace a tiempo, el bebé muere."},
+ {n:4,es:"Ama a tu prójimo",en:"Love Thy Neighbour",z:"Acasa",lim:"Fin Acto I",p:"Un peluche ensangrentado bajo el árbol de los ahorcados lleva a un hombre borracho, y de ahí a una foto de clase que hay que devolver a otra casa del pueblo."},
+ {n:5,es:"Desgarro",en:"Asunder",z:"Acasa",lim:"Fin Acto I",p:"La carta de una esposa preocupada, olvidada en un porche trasero, para el hombre sentado en el suelo junto a la excavadora."},
+ {n:6,es:"La actuación de su vida",en:"Performance of a Lifetime",z:"Acasa",lim:"Fin Acto I",p:"Dos partituras dispersas entre Jova y las Colinas de Vyssa, para el violinista que sigue tocando a la entrada de un pueblo ocupado."},
+ {n:7,es:"Emboscados",en:"Waylaid",z:"Lethe",lim:"Fin Acto II",p:"Un bote de metformina en la farmacia de Talju y una radio por satélite en el Ministerio: dos soldados de la ON atrapados en las marismas necesitan una cosa cada uno."},
+ {n:8,es:"La vigilia de Victor",en:"Victor's Vigil",z:"Acasa",p:"Las llaves de un coche en el balcón de Vitalis abren un maletero hundido en el agua. Dentro, una grabación de su marcha y un collar que pertenece a Victor."},
+ {n:9,es:"Donde está el corazón",en:"Where the Heart Is",z:"Acasa",p:"La fotografía de una niña con un casco de la ON, al fondo del túnel donde rescataste a Victor. Es de la teniente Zao Ru."},
+ {n:10,es:"Corazón de oro",en:"Heart of Gold",z:"Vyssa",lim:"Después del nº 11",p:"Las llaves de un vehículo de la ON aparecen al cerrar el bucle de Vyssa. Atticus las necesita para sacar a los refugiados del campamento."},
+ {n:11,es:"A las puertas de la muerte",en:"On Death's Door",z:"Vyssa",lim:"Fin Acto I",p:"Un bote de atenolol junto a la tumba de Vitalis. Diana, en el campamento de refugiados, no llega al final del acto sin él."},
+ {n:12,es:"El mejor amigo",en:"Man's Best Friend",z:"Acasa",p:"Con los soldados fuera de Jova ya se puede soltar al perro atado. Su dueño está entre los refugiados de Vyssa."},
+ {n:"13-16",es:"Una luz en la oscuridad",en:"A Light in the Dark",z:"Talju",lim:"Antes del jefe",p:"Cuatro bengalas y cuatro supervivientes escondidos por una ciudad en llamas. El camión de Caspian sale con los que hayas encontrado. Cuentan como cuatro encargos separados."},
+ {n:17,es:"Sal en la herida",en:"Insult to Injury",z:"Marastan",p:"Una llave de antena sobre un cadáver. La torre de radio lleva días emitiendo lo mismo sobre un pueblo que ya no puede oír nada más."},
+ {n:18,es:"Que vuelva la luz",en:"Power to the People",z:"Marastan",p:"Tres fusibles para tres cajas repartidas por el pueblo alto. Devolver la corriente también devuelve las radios, y con ellas otras historias."},
+ {n:19,es:"Lo más hondo del infierno",en:"The Depths of Hell",z:"Marastan",p:"Una bombona de gas en el muelle bajo la estatua, para el hombre que espera abajo. Se destraba escuchando la radio después de poner el primer fusible."},
+ {n:20,es:"Las llaves de Samo",en:"Samo's Keys",z:"Marastan",p:"El juego de repuesto detrás del mostrador de la tienda general, para los dos que aguantan en el tejado del taller Grisibel."},
+ {n:21,es:"Una salida",en:"A Way Out",z:"Lethe",p:"Un sello oficial hadeo encerrado en la caja fuerte de la oficina 109 y unos carnés en blanco de la 112. Con eso, la anciana del sótano de la Biblioteca Nacional puede fabricar identidades y sacar a su gente."},
+ {n:22,es:"De incógnito",en:"Incognito",z:"Lethe",lim:"Antes de salir del área",p:"Ropa de mujer en una sala cerrada del Ministerio, para una soldado de la ON que necesita dejar de parecer una soldado de la ON."},
+ {n:23,es:"Recuerdos",en:"Mementos",z:"Auriga",p:"Una pitillera en la celda 004 y un anillo hecho a mano en la 002: un sabiniano y un palomista encerrados puerta con puerta. Los objetos van a Marastan y a Senedra, a dos personas que no se conocen entre sí."},
+ {n:24,es:"Separados",en:"Separated",z:"Jeljin",p:"Dos hermanos incomunicados a ambos lados de una excavación. Las llaves de la grúa y limpiar el Haze de en medio es lo que hace falta para que vuelvan a verse."},
+ {n:25,es:"Nunca estrenados",en:"Never Worn",z:"Jeljin",p:"Unos zapatos rojos en la taquilla de un campamento arqueológico, con la carta de un padre que los compró para su hija. Ella está en Jova, junto a un peluche de elefante."},
+ {n:26,es:"Rencilla familiar",en:"Family Feud",z:"Marastan",p:"Una urna y una carta sobre marcharse del país. El columbario está en Jeljin, y el hombre del farol de las ruinas sabe por qué la familia no llegó a llevarla nunca."}
+];
+
+const CHRONO = [
+{era:"Antigüedad hasalina",span:"11700 a.C. — 2200 a.C.",ev:[
+ {y:"11700 a.C.",h:"La Gran Travesía",v:1,p:"Los hasalinos, cazadores-recolectores, cruzan las cordilleras que rodean Hadea: vientos de 260 km/h, temperaturas bajo cero, aire enrarecido. La fecha se debate entre 9000 y 11.700 a.C.; los hallazgos recientes en las montañas del norte apoyan la más antigua. Al otro lado encuentran un valle intacto."},
+ {y:"7000 a.C.",h:"Ocho tribus, vida nueva",v:1,p:"Abandonan el nomadismo: agricultura, ganado, aldeas permanentes. El chamanismo sobrevive al cambio. De esta época es el fragmento de cerámica que ya dibuja una esfera bajo el monte Obek."},
+ {y:"~3000 a.C.",h:"El mito de Sethyris",v:1,p:"Sethyris derrota a la serpiente bicéfala Teaar, que al morir maldice a la humanidad con pasiones desbordadas. Sethyris se arranca el ojo izquierdo y lo deja como refugio donde limpiarse de la ira, el terror, el éxtasis y el pesar. Ahí nace, literalmente, todo el sistema de cuatro emociones del juego."},
+ {y:"2200 a.C.",h:"El cisma y el Cónclave de Illigad",v:1,p:"Las ocho tribus se dividen. La octava rechaza el sethyrismo y adora a Teaar: es desterrada a las Colinas de Vyssa, donde levanta el túmulo de la serpiente que sigue ahí. Los sacerdotes de las siete restantes se reúnen en el valle de Illigad, canonizan a Palom —el joven que descubrió el Ojo— y fundan el palomismo.",fix:"El PDF sitúa el palomismo y la Kada Sagrada en el 403 d.C. Son de aquí, milenios antes."}
+]},
+{era:"La teocracia y el cisma",span:"2200 a.C. — 404 d.C.",ev:[
+ {y:"2200 a.C.+",h:"La Kada y la teocracia",v:1,p:"El Cónclave redacta la Kada Sagrada y se proclama gobernante de Hadea por derecho divino. La teocracia dura miles de años y se vuelve cada vez más opresiva."},
+ {y:"400 d.C.",h:"La tesis de Sabin Gau",v:1,p:"Un joven erudito escribe una tesis pidiendo únicamente la separación de iglesia y estado. De ahí sale el sabinismo y, con él, mil seiscientos años de matanzas.",fix:"El PDF la data en 404."},
+ {y:"403",h:"El saqueo de Illigad",v:1,p:"Los reformistas sabinianos arrasan el valle de Illigad y el Gran Templo de Palom. De las ocho campanas del templo solo sobrevive una, que sigue colgada allí hoy.",fix:"El PDF pone aquí la creación del palomismo."},
+ {y:"404",h:"La batalla de las Colinas de Vyssa",v:1,p:"El Cónclave había movilizado en secreto un ejército santo y masacrado territorios reformistas. El noble Konde Kolig levanta el primer ejército sabiniano y vence en tres días pese a estar en inferioridad de cinco a uno. Suya es la frase de que no existe elección entre guerra y paz, sino entre guerra y guerra sin fin.",fix:"El PDF la sitúa en el 600."}
+]},
+{era:"Las guerras santas y la Orden del Ojo",span:"404 — 708",ev:[
+ {y:"404—600",h:"Doscientos años de guerra santa",v:1,p:"Barbaridades a una escala nunca vista en ambos bandos. Varios acuerdos de paz fracasan o duran semanas."},
+ {y:"600",h:"La Congregación de la Lucidez",v:1,p:"Ocho eruditos, cuatro palomistas y cuatro sabinianos, conspiran en secreto por la paz. Si los descubren, a los sabinianos los ahorcan y descuartizan y a los palomistas los queman. Concluyen que la raíz del horror son las emociones humanas: la maldición de Teaar."},
+ {y:"600—700",h:"El redescubrimiento del Ojo",v:1,p:"Un monolito erosionado con un mapa grabado los lleva al monte Obek. Tras años perdidos en laberintos ciclópeos, encuentran el Ojo de Dios. La Congregación se rebautiza Orden del Ojo.",fix:"El PDF data el descubrimiento en 706."},
+ {y:"~700",h:"El Sudario Eminus",v:1,p:"Construyen una máquina colosal para ampliar el alcance del Ojo a todo el país y apagar las pasiones de la población entera. Funciona: la guerra se detiene de golpe.",fix:"El PDF lo llama «Altar Eminus». El nombre real es Sudario Eminus."},
+ {y:"706",h:"Los bucles",v:1,cal:1,p:"Aparecen anomalías por todo el país y la Orden las cartografía en un mapa que aún se conserva. Cuando vuelven a la cámara para desmontar el Sudario, ha desaparecido: se ha fusionado con el Ojo. Ya no hay marcha atrás. Primera Calamidad."},
+ {y:"708",h:"Relm Straggo",v:1,cal:1,p:"Descubren el prisma amine, pero cualquier materia orgánica se deteriora al acercarse al centro de un bucle. Relm Straggo se ofrece a llevarlo él mismo. Su sacrificio demuestra que la teoría era correcta y da origen a los protomártires.",fix:"El PDF lo agrupa en el 714."},
+ {y:"708",h:"La Primera Invasión Límbica",v:1,cal:1,p:"De los bucles salen las criaturas. Palomistas y sabinianos forman coalición militar por primera vez en trescientos años; hacen falta cientos de bajas para matar a una sola. El caballo blanco de madera se convierte en el símbolo de esa tregua."}
+]},
+{era:"La casa Aster",span:"714 — 793",ev:[
+ {y:"714",h:"Nace Brohm Aster",v:1,p:"El hombre que intentará quedarse con Hadea entera. Su edad es la clave del código de la caja fuerte del Ministerio de Primacía Cultural."},
+ {y:"717",h:"Los Yunques de Modus",v:1,p:"Kalvin Modus reúne a los mejores herreros del país y descubre cómo moldear las esquirlas límbicas extraídas de una criatura. Nacen las armas límbicas y la Primera Forja, y se crea la Guardia Phol para proteger a la Orden y cerrar bucles.",fix:"El PDF sitúa los Yunques en el 729."},
+ {y:"734",h:"La Alianza de Loblina",v:1,p:"Tras acalorados debates en Loblina, el poder se reparte entre cuatro casas —Aargau y Umbra, palomistas; Aster y Jehan, sabinianas— y el país en cuatro provincias: Aargaula, Umbrahan, Asteria y Jehania."},
+ {y:"754",h:"Los gemelos",v:1,p:"Nacen Konrad y Phenelo Aster. Son los dos hijos del código de la caja fuerte."},
+ {y:"770",h:"La boda de Jeljin",v:1,cal:1,p:"Lord Aster casa a su hija Phenelo con Vaahn Jehan y disfraza a sus hombres de soldados de Aargaula para asaltar la iglesia. Phenelo «sobrevive de milagro»; Vaahn no. Lord Jehan culpa a Aargaula y declara la Guerra Nupcial: la guerra que Aster no podía perder. Mientras los reformistas arrasan Aargaula, el Ojo se activa. Segunda Calamidad."},
+ {y:"773",h:"Aster, rey",v:1,p:"Lord Umbra se rinde sin condiciones para no derramar más sangre de su gente y entrega su llave heráldica. Termina la Guerra Nupcial, tres años después de empezar, y Aster se corona rey de Hadea a los 59 años.",fix:"El PDF lo data en 772. La llave heráldica de la casa Umbra dice 773 con todas las letras."},
+ {y:"793",h:"El asesinato del rey",v:1,p:"Corren rumores de que Aster intenta convertir a las criaturas en armas. Los espías de la Orden mueren antes de hablar, incluso bajo tortura, y todo lo que sacan es el nombre de un sitio: el Museo Auriga. Sin más opciones, ordenan matarlo. Cae tras veinte años de reinado y se restaura la oligarquía.",fix:"El PDF lo data en 775. Tus cuadros de la oficina de Ralst decían 793."}
+]},
+{era:"El ciclo de las calamidades",span:"807 — 950",ev:[
+ {y:"807",h:"Marguerith de Aargaula",v:1,p:"Asciende a duquesa al morir su padre, Lord Yumal Aargau. No podía tener hijos y trató a su provincia entera como si lo fuera. Prohíbe la violencia como pecado capital —cualquier altercado, por leve que sea, se castiga igual—, crea la vigilancia secreta de Solozna y excava las Cuevas del Yumal, una ciudad subterránea para miles de personas.",fix:"El PDF la data en 805."},
+ {y:"838",h:"El amor lo vence todo",v:1,cal:1,p:"Su pueblo, asfixiado, se rebela y toma Trisk a sangre. Desde las murallas de la fortaleza Dallglav, viendo a sus «hijos» matándose entre ellos, Marguerith se corta el cuello con su propia daga enjoyada. Un bucle se forma a su alrededor y la deja repitiendo el gesto para siempre. Tercera Calamidad.",fix:"El PDF la data en 807."},
+ {y:"871",h:"El Traidor",v:1,cal:1,p:"Francis Aldrich, criado de rodillas ante el ojo de Sethyris y expulsado de la Orden por robar páginas de la Biblioteca Prohibida, funda los Siervos de Teaar. La reina Vigga manda a su mejor amiga, Sophia Morton, a negociar; le devuelven su cabeza en una cesta. Cuando el ejército asalta el Templo de los Caídos, los cultistas se degüellan a la vez, y otros lo hacen simultáneamente por todo el país. Cuarta Calamidad.",fix:"El PDF la data en 838 y pone en 871 el nacimiento de Aldrich."},
+ {y:"~918",h:"La Reina Sangrienta",v:0,p:"Harvor Raveta, criada como guerrero por su tío Thomas Raveta con libros infantiles que dibujaban a los sabinianos como insectos, es elegida por el clero palomista para casarse con el joven rey Garland. Desvía los fondos de reconstrucción al ejército y levanta campos de exterminio y torres por toda Hadea; la más famosa, la Aguja de Arcas, donde guardaba un hueso de cada hereje ejecutado. Llegó a tener tantos que le hacían tocados con ellos."},
+ {y:"~918",h:"La Noche de las Dagas Afiladas",v:0,p:"Golpe palomista en una sola noche: asesinan durmiendo a todos los nobles y sacerdotes reformistas. Al amanecer el rey Garland renuncia a su fe. Empieza el genocidio sabiniano.",fix:"El PDF lo data en 871."},
+ {y:"~937",h:"Losilus",v:0,cal:1,p:"Acorralados en la capital de Asteria y sabiendo lo que pasa en los campos, todos los habitantes —soldados y civiles— abren las puertas al amanecer y salen a morir peleando. El Ojo se abre sobre la matanza y también sobre los campos de exterminio. Quinta Calamidad, la más mortífera de la historia de Hadea."}
+]},
+{era:"El milenio de paz",span:"950 — 1513",ev:[
+ {y:"950",h:"La Orden gobierna",v:1,p:"Por primera vez toman el control directo: una monarquía títere con eruditos haciendo de reyes y reinas. Garland y Harvor ya han sido asesinados, y el nombre de ella se borra de la historia. Solo queda en pie su Aguja de Arcas, sellada.",fix:"El PDF lo data en 937."},
+ {y:"950",h:"La Purga del Conocimiento",v:1,p:"Reescriben la historia hasta que las entidades límbicas pasan de hecho a demonio de cuento. Hablar de ellas se convierte en pecado. Funciona durante mil años."},
+ {y:"970",h:"El Carnaval y la Semana de la Paz",v:1,p:"Primera celebración. Una semana de excesos y otra de ayuno y paz absoluta por decreto, y siempre coincidiendo con la activación del Ojo. Se repite cada 33 años. La gente creía que celebraba una tradición; en realidad se estaba autoconteniendo."},
+ {y:"1502",h:"La expedición a las Cuevas del Yumal",v:1,p:"El general Cirene, Centinela del Pesar, dirige una expedición y esconde allí la Piedra Angular del Pesar. Orunwe Mateus lo anota en su diario, que tardará 470 años en volver a leerse.",fix:"El PDF la data en 1501."},
+ {y:"1513",h:"El banquete envenenado",v:1,p:"Sin calamidades a la vista, la Orden decide que la Guardia Phol sobra. Los disuelve envenenándolos en masa en un gran banquete. Pentos Algea, Centinela del Pesar, llevaba tiempo desconfiando y no fue. Es el único general que sobrevive.",fix:"El PDF lo data en 1508."}
+]},
+{era:"La Vigilia en la sombra",span:"1513 — 1946",ev:[
+ {y:"1513",h:"Nace la Vigilia",v:1,p:"Pentos funda una orden secreta que hereda la misión de la Guardia Phol. Sin recursos, el reclutamiento se limita a los hijos de los miembros. Él conocía la ubicación de la Primera Forja y llevaba encima la Piedra Angular del Pesar, pero muere de repente y el secreto muere con él: la Vigilia se queda con la misión y sin los medios."},
+ {y:"1850",h:"Puertas abiertas",v:1,p:"Tras siglos de miembros menguantes, abren el reclutamiento a gente de fuera. La prueba consistía en salir al monte con una vela y volver una semana después con ella todavía encendida.",fix:"El PDF sitúa aquí la muerte de Pentos, ocurrida siglos antes."}
+]},
+{era:"La conspiración Ziel",span:"1945 — 1987",ev:[
+ {y:"~1945",h:"Caleb Cyprus",v:1,p:"La Orden decide que ya no puede mantener al mundo fuera y busca un aliado dentro de la ON. Eligen a un mediador respetado y sin ideología. Le enseñan los archivos, las armas antiguas y los restos conservados de Hollow Walkers. Caleb se va cambiado para siempre e informa a sus verdaderos amos."},
+ {y:"1946",h:"El Consejo Ziel",v:1,p:"En julio, Frank Vanderlyn (banca), Henry D. Ward (petróleo) y Charles Dagon (armamento, Proyecto Manhattan) se reúnen con los eruditos en la isla de Hyde, en el lago Kilm. Donde la Orden ve una maldición que contener, ellos ven energía y armas. Nace la Operación Moloch: provocar una Calamidad controlada para estudiarla. La Orden se queda a oscuras."},
+ {y:"1948",h:"El Axioma",v:1,p:"Cuatro divisiones que no saben unas de otras: Cerebrum (ciencia, Edwin Pierson), Manus (militar y los soldados OMSIF, general Emerson), Oculus (espionaje, Joseph Donovan) y Aestus (propaganda, William Fleming). Solo el Consejo conoce el plan entero."},
+ {y:"1952",h:"El golpe fabricado",v:1,p:"Geryon Yankel asalta el palacio real de noche y mata a la familia monárquica. Al día siguiente se proclama presidente. Aestus llevaba años construyéndole la imagen: humilde para los palomistas, reformista para los sabinianos, útil para el Consejo."},
+ {y:"1953",h:"Las leyes",v:1,p:"Entre junio y diciembre: censura previa de prensa, pasaportes anulados, policía convertida en rama militar y programas de delación premiada."},
+ {y:"1954",h:"Operación Bastión",v:1,p:"En marzo empiezan los muros, las alambradas, las torres de vigilancia y los campos de minas. Servicio militar obligatorio y deserción castigada con la muerte."},
+ {y:"1957",h:"Estado ermitaño",v:1,p:"En agosto la operación se da por completa. Hadea queda sellada y desaparece del mundo."},
+ {y:"1957",h:"Nace Rémi Letam",v:0,p:"El mismo año en que se cierra la frontera. La fecha no aparece citada en ningún texto del juego, pero se deduce: el juego transcurre en 1993, Rémi fue sacado del país con cinco años, y su huida se sitúa en 1962. Tres documentos independientes lo colocan aquí o muy cerca."},
+ {y:"1959",h:"La Gran Visión de Unificación",v:1,p:"Yankel anuncia el plan de reubicación. Primero con incentivos, después con sorteos forzosos y marcas de pintura en las puertas. Se vendió como unificar el país; el objetivo real del Consejo era mezclar a palomistas y sabinianos para que la tensión fuera máxima cuando llegara el momento."},
+ {y:"1960",h:"El último carnaval",v:1,p:"Se celebra con normalidad. Nadie sabe que es la última vez."},
+ {y:"1962",h:"La parte de atrás de un camión",v:0,p:"Aribeth mete a Rémi, de cinco años, en un camión y le dice que no vuelva nunca. Él sale del país. Ella se queda dentro, y años después aparecerá con uniforme de OMSIF. La versión que circula de que fue capturada y encarcelada aquí no está confirmada en ninguna parte y encaja mal con su carrera posterior."},
+ {y:"1972",h:"El diario de Orunwe",v:1,p:"La Vigilia consigue abrir por primera vez una Cámara del Saber Prohibido. Dentro está el diario que menciona las Cuevas del Yumal y la piedra escondida."},
+ {y:"1977",h:"La entrada",v:1,p:"Unos niños de Trisk son detenidos por blandir una espada antigua que brillaba. El agente que los detiene es de la Vigilia y les pregunta de dónde la han sacado. Lo llevan a una puerta de piedra tapiada con el sello de Lady Marguerith casi borrado encima."},
+ {y:"1980",h:"Se prohíbe el carnaval",v:1,p:"Sin explicación, Yankel ilegaliza la única tradición que había sostenido el país durante mil años. Tras décadas de represión, nadie se atreve a protestar."},
+ {y:"1982",h:"Muere Yankel",v:1,p:"El 26 de junio aparece muerto en su finca privada del lago Cynon, de un tiro en la sien. La versión oficial es suicidio; fue un equipo de Oculus. El país entra en coalición y en ocho años de sabotaje político y propaganda de odio dirigidos desde fuera."},
+ {y:"1987",h:"La Piedra Angular del Pesar",v:1,p:"Tras años de expedición sangrienta por unas cuevas infestadas por un bucle superviviente de la Tercera Calamidad, la Vigilia encuentra la piedra. Al salir, entre cadáveres de guardias phol, hallan el pergamino con la ubicación del Nido del Vigía.",fix:"El PDF sitúa el hallazgo en 1982."}
+]},
+{era:"La guerra civil y la Sexta Calamidad",span:"1990 — 1993",ev:[
+ {y:"1990",h:"Yvel",v:1,p:"En marzo, Pheneas Bizima da un discurso incendiario ante los peregrinos palomistas del valle de Illigad. Esa misma tarde una turba quema comercios y casas sabinianas mientras la policía mira; cuando los agentes sabinianos intervienen, disparan contra la multitud. Los sabinianos lo llamaron Disturbios de los Peregrinos y los palomistas Masacre de la Peregrinación. La cinta conmemorativa se volvió motivo de pelea con solo llevarla puesta."},
+ {y:"1990",h:"El mercado de Marastan",v:1,p:"En abril estalla una bomba en el mercado de agricultores. Docenas de muertos. En septiembre Jehania vota su independencia con la ON de observadora; los nacionalistas de Aargaula cortan las manos de los votantes para impedirlo, y de ese grupo saldrá la División Deimos."},
+ {y:"1990—91",h:"La guerra",v:1,p:"Aargaula invade Jehania para recuperar lo anexionado durante la dictadura, con la Deimos detrás dejando un rastro de masacres. Umbrahan toma el valle de Illigad. Asteria se adelanta y captura sus campos petrolíferos."},
+ {y:"1992",h:"Lethe",v:1,p:"Los palomistas toman la capital, Loblina, y sitian Lethe. En diciembre la ON se retira; solo unos pocos se quedan por su cuenta. Ese mismo mes OMSIF despliega soldados y científicos de Cerebrum por todo el país: el experimento estaba listo."},
+ {y:"1993",h:"1 de enero",v:1,cal:1,p:"Aparecen los bucles, atrapando momentos de la guerra en repetición eterna. Después salen las criaturas. Sexta Calamidad."},
+ {y:"1993",h:"Los manuscritos",v:1,p:"Tania Alver redacta sus borradores en enero. La Vigilia, casi exterminada por dentro y traicionada por alguien, la había contactado para que alguien contara la verdad. De la orden queda un hombre. Y entonces llega Rémi."},
+ {y:"Pendiente",h:"Fase 5: Inmolación",v:1,p:"La última fase de la Operación Moloch no se ha ejecutado todavía. Tania solo concluye una cosa: que el Consejo Ziel piensa eliminar todas las pruebas y a todos los testigos, y que prefiere no saber cómo."}
+]}
+];
+
+const ZONES = ["Todos","Senedra","Acasa","Vyssa","Talju","Marastan","Jeljin","Lethe","Auriga"];
+
+function timeline(){
+  return ACTS.map(a=>`<article class="act">
+    <div class="act-tag"><i>${a.tag}</i><b>${a.title}</b></div>
+    <p class="act-note">${a.note}</p>
+    <div class="spine">${a.beats.map(b=>`
+      <div class="beat${b.k?" key":""}"${b.k?` data-k="${b.k}"`:""}>
+        <div class="where">${b.where}</div>
+        <h3>${b.h}</h3>
+        <p>${b.p}</p>
+        <div class="threads">${(b.t||[]).map(t=>`<button class="thread" data-go="${t}">${label(t)}</button>`).join("")}</div>
+      </div>`).join("")}</div>
+  </article>`).join("");
+}
+function label(id){
+  const p=PEOPLE.find(x=>x.id===id); if(p) return p.n;
+  return {ziel:"Consejo Ziel",omsif:"OMSIF",failsafe:"El Failsafe",sethyris:"Sethyris"}[id]||id;
+}
+const SWATCHES=`<div class="sw">
+ <span><i style="background:var(--pesar)"></i>Pesar<b>cobalto</b></span>
+ <span><i style="background:var(--ira)"></i>Ira<b>carmesí</b></span>
+ <span><i style="background:var(--extasis)"></i>Éxtasis<b>dorado</b></span>
+ <span><i style="background:var(--terror)"></i>Terror<b>esmeralda</b></span>
+</div>`;
+function slug(s){
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+          .toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"x";
+}
+function card(o){
+  return `<div class="card" data-b="${o.b}" id="p-${o.id||slug(o.n)}">
+    <h4>${o.n}</h4><p class="role">${o.r}</p><p>${o.p}</p>
+    ${o.sw?SWATCHES:""}
+    ${o.f?`<span class="fate">${o.f}</span>`:""}</div>`;
+}
+function deedRow(d){
+  return `<div class="deed" data-z="${d.z}">
+    <div class="n">${String(d.n).padStart(2,"0")}</div>
+    <div><h4>${d.es}<span class="orig">${d.en}</span></h4><p>${d.p}</p>
+    <div class="tags"><span class="tag">${d.z}</span>${d.lim?`<span class="tag limit">Caduca · ${d.lim}</span>`:""}</div></div>
+  </div>`;
+}
+
+function chrono(){
+  return CHRONO.map(e=>`<article class="era">
+    <h3>${e.era}</h3><p>${e.span}</p>
+    ${e.ev.map(x=>`<div class="ev${x.cal?" cal":(x.v?" ver":"")}">
+      <div class="yr"><span>${x.y}</span><i></i></div>
+      <div><h5>${x.h}</h5><p>${x.p}</p>${x.fix?`<span class="fix">Corrección · ${x.fix}</span>`:""}</div>
+    </div>`).join("")}
+  </article>`).join("");
+}
+document.getElementById("chrono").innerHTML=chrono();
+document.getElementById("timeline").innerHTML=timeline();
+document.getElementById("people").innerHTML=PEOPLE.map(card).join("");
+document.getElementById("factions").innerHTML=FACTIONS.map(card).join("");
+document.getElementById("lore").innerHTML=LORE.map(card).join("");
+document.getElementById("deeds").innerHTML=DEEDS.map(deedRow).join("");
+document.getElementById("filters").innerHTML=ZONES.map((z,i)=>
+  `<button data-z="${z}" aria-pressed="${i===0}">${z}</button>`).join("");
+
+const tabs=[...document.querySelectorAll('nav button')];
+function show(id){
+  tabs.forEach(t=>{
+    const on=t.id===id;
+    t.setAttribute("aria-selected",on);
+    document.getElementById(t.getAttribute("aria-controls")).hidden=!on;
+  });
+}
+tabs.forEach(t=>t.addEventListener("click",()=>show(t.id)));
+
+document.getElementById("filters").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  [...e.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));
+  const z=b.dataset.z;
+  document.querySelectorAll(".deed").forEach(d=>{
+    d.style.display=(z==="Todos"||d.dataset.z===z)?"":"none";
+  });
+});
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest(".thread"); if(!t) return;
+  const id=t.dataset.go;
+  const tab=PEOPLE.some(p=>p.id===id)?"t-gente"
+           :FACTIONS.some(f=>f.id===id)?"t-poder"
+           :LORE.some(l=>l.id===id)?"t-lore":null;
+  if(!tab) return;
+  show(tab);
+  window.scrollTo({top:document.querySelector("nav").offsetTop-8,behavior:"smooth"});
+  const el=document.getElementById("p-"+id);
+  if(el){
+    el.classList.add("hit");
+    setTimeout(()=>el.classList.remove("hit"),1800);
+  }
+});
+
+const lock=document.getElementById("lock");
+const io=new IntersectionObserver(es=>{
+  es.forEach(en=>{
+    if(!en.isIntersecting) return;
+    const k=en.target.dataset.k;
+    lock.querySelector(`[data-k="${k}"]`)?.classList.add("on");
+  });
+},{rootMargin:"-40% 0px -40% 0px"});
+document.querySelectorAll(".beat.key").forEach(b=>io.observe(b));
+</script>
+</body>
+</html>
